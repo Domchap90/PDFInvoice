@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -42,12 +43,30 @@ public class CreatePDF {
 			image.setAbsolutePosition(225, 700);
 			doc.add(image);
 
-			// Text title = new Text("Deposit fund receipt");
-			Font font = new Font(FontFamily.TIMES_ROMAN, 20.0f);
+			// Title
+			Font font = new Font(FontFamily.TIMES_ROMAN, 30.0f);
 			Paragraph title = new Paragraph("Invoice", font);
-			title.setSpacingBefore(200);
-			title.setIndentationLeft(200);
+			title.setSpacingBefore(100);
+			title.setIndentationLeft(220);
 			doc.add(title);
+
+			// Today's Date.
+			Paragraph p1 = new Paragraph("Date: " + LocalDate.now().toString());
+			p1.setIndentationLeft(420f);
+			doc.add(p1);
+
+			// To (Client name) please pay the Total amount by direct bank transfer to the
+			Client client = new Client("John Smith", false);
+			String message1 = " For the attention of " + client.getName() + ", please pay the Total amount"
+					+ " listed by direct bank transfer to the following account details:";
+			String message2 = "\nAccount number: XXXX XXXX\n" +
+			"Sort Code:XX XX XX\nReference: (your first intial) + (surname)";
+			Paragraph p2 = new Paragraph(message1, new Font(FontFamily.COURIER, 14.0f, 2));
+			p2.setSpacingBefore(100);
+			doc.add(p2);
+			Paragraph p3 = new Paragraph(message2, new Font(FontFamily.COURIER, 14.0f, 1));
+			doc.add(p3);
+			// following account details
 
 			PdfPTable table = new PdfPTable(4);
 			table.setWidthPercentage(100);
@@ -86,6 +105,7 @@ public class CreatePDF {
 				table.addCell(cell);
 				}
 			doc.add(table);
+			table.getHorizontalAlignment();
 			// add table to doc
 			doc.close();
 			writer.close();
